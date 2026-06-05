@@ -182,32 +182,30 @@
     </div>
 
     <script>
-        // EARNKARO AFFILIATE ENGINE WITH AUTOMATIC ROUTING PARAMETERS
         const masterAffiliateBase = "https://earnkaro.com?r=5343575&fname=Hamza+Shahab";
         const STORAGE_KEY = "shopping_pari_local_profile";
         
         let userName = ""; let savedCash = 0;
         let activeKeyword = "Trending"; let currentRowCount = 0;
 
-        // DIVERSE IMAGE REPOSITORY MATRIX (HAR DESIGN KI ALAG PHOTO)
         const productCatalog = {
             watch: [
-                "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400", // Metal Analog
-                "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?w=400", // Leather Classic
-                "https://images.unsplash.com/photo-1612817288484-6f916006741a?w=400", // Smart Watch
-                "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=400"  // Rose Gold Variant
+                "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400",
+                "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?w=400",
+                "https://images.unsplash.com/photo-1612817288484-6f916006741a?w=400",
+                "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=400"
             ],
             shoes: [
-                "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400", // Red Sport Sneaker
-                "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400", // Neon Green Running
-                "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400", // Pastel Designer Pink
-                "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400"  // Casual Brown Leather
+                "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",
+                "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400",
+                "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400",
+                "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400"
             ],
             shirt: [
-                "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400", // Yellow Summer Fit
-                "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400", // Formal Checked Style
-                "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400", // Minimalist Dark Black
-                "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400"  // Classic White Oxford
+                "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400",
+                "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400",
+                "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400",
+                "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400"
             ],
             phone: [
                 "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400",
@@ -251,7 +249,6 @@
             loadLocalProfile();
             triggerDiscovery(activeKeyword);
             
-            // INFINITE ENGINE DETECTOR
             window.addEventListener('scroll', () => {
                 if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 600) {
                     injectMoreLines();
@@ -265,7 +262,7 @@
                 const parsed = JSON.parse(savedData);
                 userName = parsed.name; savedCash = parsed.saved || 0;
                 hideAuthOverlay(); renderHeaderUI();
-                pariTalk(`Welcome back, ${userName} bhai!`);
+                setTimeout(() => { pariTalk(`Welcome back, ${userName} bhai!`); }, 800);
             }
         }
 
@@ -275,10 +272,11 @@
             userName = inputVal;
             localStorage.setItem(STORAGE_KEY, JSON.stringify({ name: userName, saved: 0 }));
             hideAuthOverlay(); renderHeaderUI();
-            pariTalk(`Welcome, ${userName} bhai!`);
+            setTimeout(() => { pariTalk(`Welcome, ${userName} bhai!`); }, 500);
         }
 
         function hideAuthOverlay() { document.getElementById("auth-overlay").style.display = "none"; }
+        
         function renderHeaderUI() {
             document.getElementById("app-user-badge").style.display = "flex";
             document.getElementById("user-display-name").innerText = userName;
@@ -288,11 +286,13 @@
         function pariTalk(text) {
             const bubble = document.getElementById("pari-bubble-box");
             bubble.innerText = text; bubble.classList.add("active");
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const speech = new SpeechSynthesisUtterance(text);
-                speech.lang = 'hi-IN'; window.speechSynthesis.speak(speech);
-            }
+            try {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const speech = new SpeechSynthesisUtterance(text);
+                    speech.lang = 'hi-IN'; window.speechSynthesis.speak(speech);
+                }
+            } catch(e) { console.log("Audio speech blocked or unsupported"); }
         }
 
         function detectEnterKey(event) {
@@ -302,7 +302,6 @@
             }
         }
 
-        // KEYWORD DETECTION AND SEARCH RE-RENDER ENGINE
         function triggerDiscovery(keyword) {
             activeKeyword = keyword; currentRowCount = 0;
             pariTalk(`Scanning arbo products for ${keyword}...`);
@@ -336,14 +335,56 @@
         function compileProductCard(store, price, isCheapest, index) {
             let key = activeKeyword.toLowerCase();
             let imgList = productCatalog[key] || productCatalog["trending"];
-            
-            // AUTOMATIC ROTATION LOOP: Har alag line me automatically alag design photo choose hogi!
             let imgUrl = imgList[(index - 1) % imgList.length];
-            
-            // Dynamic design title builder
             let designName = designVariants[(index - 1) % designVariants.length];
 
-            // AUTOMATIC AUTO-AFFILIATE ROUTER MATRIX:
-            // Kisi manual code ki zarurat nahi, ye pure internet ke link ko automatic wrap karta hai runtime par!
             let targetProductRealUrl = "";
-            if(store === "Amazon") targetProductRealUrl = "https://www.amazon.in/s?k=" + encodeURIComponent(activeKeyword + " " + designName
+            if(store === "Amazon") targetProductRealUrl = "https://www.amazon.in/s?k=" + encodeURIComponent(activeKeyword + " " + designName);
+            if(store === "Flipkart") targetProductRealUrl = "https://www.flipkart.com/search?q=" + encodeURIComponent(activeKeyword + " " + designName);
+            if(store === "Meesho") targetProductRealUrl = "https://www.meesho.com/search?q=" + encodeURIComponent(activeKeyword + " " + designName);
+
+            let finalAffiliateRedirect = `${masterAffiliateBase}&goto=${encodeURIComponent(targetProductRealUrl)}`;
+
+            if(isCheapest) {
+                return `
+                    <div class="store-card cheapest-glow">
+                        <div class="loot-badge">Pari Loot Deal</div>
+                        <div>
+                            <div class="product-img-holder"><img src="${imgUrl}"></div>
+                            <div class="store-name store-${store.toLowerCase()}"><i class="fa-solid fa-store"></i> ${store}</div>
+                            <div class="prod-title">${designName} ${activeKeyword}</div>
+                        </div>
+                        <div class="price-row"><span class="price-val">₹${price}</span><a href="${finalAffiliateRedirect}" target="_blank" class="buy-btn" onclick="addLootSavings(${price})">Loot Lo</a></div>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="store-card">
+                        <div>
+                            <div class="product-img-holder"><img src="${imgUrl}" style="opacity:0.85;"></div>
+                            <div class="store-name store-${store.toLowerCase()}"><i class="fa-solid fa-store"></i> ${store}</div>
+                            <div class="prod-title">${designName} ${activeKeyword}</div>
+                        </div>
+                        <div class="price-row"><span class="price-val" style="color:var(--text-dim)">₹${price}</span><a href="${finalAffiliateRedirect}" target="_blank" class="buy-btn">Check Site</a></div>
+                    </div>
+                `;
+            }
+        }
+
+        function addLootSavings(price) {
+            let extraSaving = Math.floor(Math.random() * 150 + 50);
+            savedCash += extraSaving;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({ name: userName, saved: savedCash }));
+            renderHeaderUI();
+        }
+
+        function openPhotoScanner() {
+            document.getElementById("hidden-file-input").click();
+            document.getElementById("hidden-file-input").onchange = () => {
+                triggerDiscovery("Shirt");
+            };
+        }
+        function pariManualClick() { pariTalk("Main har line ka sasta maal dhoodh nikalungi bhai!"); }
+    </script>
+</body>
+</html>
