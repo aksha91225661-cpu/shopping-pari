@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Pari - Automated Infinite Matrix</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #060212;
+            --card-bg: rgba(18, 9, 36, 0.7);
+            --neon-blue: #00f0ff;
+            --neon-pink: #ff007f;
+            --neon-green: #39ff14;
+            --text-main: #ffffff;
+            --text-dim: #a4a2c1;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body {
+            background: var(--bg-color); color: var(--text-main); overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, #15082b 0%, var(--bg-color) 85%);
+            min-height: 100vh;
+        }
+
+        #auth-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(4, 1, 10, 0.97); backdrop-filter: blur(12px); z-index: 10000;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .auth-card {
+            background: var(--card-bg); border: 2px solid var(--neon-pink);
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.4); padding: 40px; border-radius: 24px;
+            text-align: center; max-width: 420px; width: 90%;
+        }
+
+        .auth-card h2 { font-family: 'Orbitron', sans-serif; color: var(--neon-pink); margin-bottom: 15px; }
+        .auth-card input {
+            width: 100%; padding: 14px 22px; background: rgba(0,0,0,0.5);
+            border: 1px solid var(--neon-blue); border-radius: 30px; color: white;
+            font-size: 16px; margin-bottom: 25px; outline: none; text-align: center;
+        }
+
+        .auth-card button {
+            background: linear-gradient(45deg, var(--neon-pink), #9000ff); color: white;
+            border: none; padding: 14px 40px; border-radius: 30px; font-weight: 600; cursor: pointer;
+        }
+
+        header {
+            padding: 20px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05); position: sticky; top: 0; z-index: 100;
+            background: rgba(6, 2, 18, 0.85); backdrop-filter: blur(8px);
+        }
+
+        .logo-text {
+            font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: bold;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .user-badge {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            padding: 8px 18px; border-radius: 25px; display: flex; align-items: center; gap: 12px;
+        }
+
+        .savings-counter { color: var(--neon-green); font-weight: bold; }
+
+        .search-container { max-width: 750px; margin: 40px auto 30px auto; padding: 0 20px; }
+        .search-box-wrapper {
+            display: flex; align-items: center; background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 40px; padding: 6px 12px;
+        }
+
+        .search-box-wrapper input { flex: 1; background: transparent; border: none; padding: 12px 15px; color: white; font-size: 16px; outline: none; }
+        .scanner-btn { background: transparent; border: none; color: var(--text-dim); font-size: 22px; padding: 8px 12px; cursor: pointer; }
+        #hidden-file-input { display: none; }
+
+        .categories-section { max-width: 1150px; margin: 0 auto 40px auto; padding: 0 20px; }
+        .section-title { font-family: 'Orbitron', sans-serif; font-size: 16px; margin-bottom: 20px; color: var(--text-dim); letter-spacing: 2px; }
+        
+        .categories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; }
+        .category-card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.04); border-radius: 18px; padding: 22px 12px; text-align: center; cursor: pointer; transition: 0.3s; }
+        .category-card:hover { transform: translateY(-6px); border-color: var(--neon-pink); }
+        .category-card i { font-size: 28px; margin-bottom: 12px; background: linear-gradient(45deg, #a200ff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .matrix-container { max-width: 1150px; margin: 0 auto 100px auto; padding: 0 20px; }
+        .matrix-row { background: rgba(10, 4, 22, 0.3); border-radius: 22px; padding: 20px; margin-bottom: 35px; border: 1px solid rgba(255,255,255,0.03); }
+        .row-header { font-size: 14px; color: var(--neon-blue); margin-bottom: 15px; font-weight: bold; font-family: 'Orbitron', sans-serif; }
+        
+        .matrix-grid { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 15px; scroll-snap-type: x mandatory; }
+        
+        @media (min-width: 851px) {
+            .matrix-grid { display: grid; grid-template-columns: repeat(3, 1fr); overflow-x: visible; }
+        }
+
+        .store-card {
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px;
+            padding: 16px; position: relative; min-width: 280px; scroll-snap-align: start;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+
+        .store-card.cheapest-glow { border: 2px solid var(--neon-green) !important; box-shadow: 0 0 25px rgba(57, 255, 20, 0.35); }
+        .loot-badge { position: absolute; top: -12px; right: 20px; background: var(--neon-green); color: #000; font-size: 10px; font-weight: bold; padding: 4px 10px; border-radius: 12px; }
+        
+        .product-img-holder { width: 100%; height: 140px; display: flex; justify-content: center; align-items: center; margin-bottom: 12px; background: rgba(0,0,0,0.25); border-radius: 12px; overflow: hidden; }
+        .product-img-holder img { max-height: 100%; max-width: 100%; object-fit: cover; }
+
+        .store-name { font-family: 'Orbitron', sans-serif; font-size: 13px; margin-bottom: 6px; font-weight: bold; }
+        .store-amazon { color: #ff9900; }
+        .store-flipkart { color: #2874f0; }
+        .store-meesho { color: #f43397; }
+
+        .prod-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; }
+        .price-val { font-size: 18px; font-weight: bold; font-family: 'Orbitron', sans-serif; }
+        .cheapest-glow .price-val { color: var(--neon-green); }
+
+        .buy-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px; text-decoration: none; cursor: pointer; }
+        .cheapest-glow .buy-btn { background: var(--neon-green); color: black; font-weight: bold; }
+
+        .pari-container { position: fixed; bottom: 30px; right: 30px; z-index: 999; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
+        .pari-avatar { width: 90px; height: 90px; background: radial-gradient(circle, rgba(255,0,127,0.25) 0%, transparent 70%); border-radius: 50%; display: flex; justify-content: center; align-items: center; animation: floatPari 3.5s ease-in-out infinite; pointer-events: auto; cursor: pointer; }
+        .pari-bubble { background: rgba(12, 5, 28, 0.95); border: 1px solid var(--neon-blue); box-shadow: 0 0 18px rgba(0, 240, 255, 0.35); padding: 12px 18px; border-radius: 18px; max-width: 250px; font-size: 13px; margin-bottom: 12px; opacity: 0; transform: translateY(10px); transition: 0.3s; text-align: center; pointer-events: auto; }
+        .pari-bubble.active { opacity: 1; transform: translateY(0); }
+
+        @keyframes floatPari { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+    </style>
+</head>
+<body>
+
+    <div id="auth-overlay">
+        <div class="auth-card">
+            <h2>SHOPPING PARI</h2>
+            <p style="color: var(--text-dim); font-size: 13.5px; margin-bottom: 25px;">Life me sirf ek baar apna naam register karein.</p>
+            <input type="text" id="user-name-field" placeholder="Apna Naam Likhein...">
+            <button onclick="initCoreProfile()">Magic Activate 🧚‍♂️</button>
+        </div>
+    </div>
+
+    <header>
+        <span class="logo-text">SHOPPING PARI</span>
+        <div class="user-badge" id="app-user-badge" style="display:none;">
+            <span id="user-display-name">User</span>
+            <span class="savings-counter" id="user-display-savings">Saved: ₹0</span>
+        </div>
+    </header>
+
+    <div class="search-container">
+        <div class="search-box-wrapper">
+            <input type="text" id="app-search-input" placeholder="Shirt, Shoes, Watch kuch bhi search karein..." onkeypress="detectEnterKey(event)">
+            <button class="scanner-btn" onclick="openPhotoScanner()"><i class="fa-solid fa-camera"></i></button>
+        </div>
+        <input type="file" id="hidden-file-input" accept="image/*">
+    </div>
+
+    <div class="categories-section">
+        <div class="categories-grid">
+            <div class="category-card" onclick="triggerDiscovery('Watch')"><i class="fa-solid fa-stopwatch"></i><p>Watches</p></div>
+            <div class="category-card" onclick="triggerDiscovery('Shoes')"><i class="fa-solid fa-shoe-prints"></i><p>Shoes</p></div>
+            <div class="category-card" onclick="triggerDiscovery('Shirt')"><i class="fa-solid fa-shirt"></i><p>Shirts</p></div>
+            <div class="category-card" onclick="triggerDiscovery('Phone')"><i class="fa-solid fa-mobile-screen-button"></i><p>Phones</p></div>
+            <div class="category-card" onclick="triggerDiscovery('Jwellery')"><i class="fa-solid fa-gem"></i><p>Jwellery</p></div>
+            <div class="category-card" onclick="triggerDiscovery('Clothes')"><i class="fa-solid fa-socks"></i><p>Clothes</p></div>
+            <div class="category-card" onclick="triggerDiscovery('Sarees')"><i class="fa-solid fa-person-dress"></i><p>Sarees</p></div>
+            <div class="category-card" onclick="triggerDiscovery('Glasses')"><i class="fa-solid fa-glasses"></i><p>Glasses</p></div>
+        </div>
+    </div>
+
+    <div class="matrix-container" id="matrix-wall"></div>
+
+    <div class="pari-container">
+        <div class="pari-bubble" id="pari-bubble-box"></div>
+        <div class="pari-avatar" onclick="pariManualClick()">
+            <svg width="65" height="65" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="24" r="10" fill="#ff007f" opacity="0.85"/>
+                <circle cx="32" cy="22" r="7" fill="#fff"/>
+            </svg>
+        </div>
+    </div>
+
+    <script>
+        // EARNKARO AFFILIATE ENGINE WITH AUTOMATIC ROUTING PARAMETERS
+        const masterAffiliateBase = "https://earnkaro.com?r=5343575&fname=Hamza+Shahab";
+        const STORAGE_KEY = "shopping_pari_local_profile";
+        
+        let userName = ""; let savedCash = 0;
+        let activeKeyword = "Trending"; let currentRowCount = 0;
+
+        // DIVERSE IMAGE REPOSITORY MATRIX (HAR DESIGN KI ALAG PHOTO)
+        const productCatalog = {
+            watch: [
+                "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400", // Metal Analog
+                "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?w=400", // Leather Classic
+                "https://images.unsplash.com/photo-1612817288484-6f916006741a?w=400", // Smart Watch
+                "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=400"  // Rose Gold Variant
+            ],
+            shoes: [
+                "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400", // Red Sport Sneaker
+                "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400", // Neon Green Running
+                "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400", // Pastel Designer Pink
+                "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400"  // Casual Brown Leather
+            ],
+            shirt: [
+                "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400", // Yellow Summer Fit
+                "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400", // Formal Checked Style
+                "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400", // Minimalist Dark Black
+                "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400"  // Classic White Oxford
+            ],
+            phone: [
+                "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400",
+                "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400",
+                "https://images.unsplash.com/photo-1565630916779-e303be97b6f5?w=400",
+                "https://images.unsplash.com/photo-1573148195900-7845dcb9b127?w=400"
+            ],
+            jwellery: [
+                "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400",
+                "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400",
+                "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400",
+                "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=400"
+            ],
+            clothes: [
+                "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400",
+                "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=400",
+                "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=400",
+                "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400"
+            ],
+            sarees: [
+                "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400",
+                "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=400",
+                "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=400",
+                "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=400"
+            ],
+            glasses: [
+                "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400",
+                "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400",
+                "https://images.unsplash.com/photo-1508296695146-257a814070b4?w=400",
+                "https://images.unsplash.com/photo-1577803645773-f96470509666?w=400"
+            ],
+            trending: [
+                "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400",
+                "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400"
+            ]
+        };
+
+        const designVariants = ["Classic", "Luxury Ultra", "Sport Edition", "Street Wear Spec", "Retro Designer", "Premium Bold"];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadLocalProfile();
+            triggerDiscovery(activeKeyword);
+            
+            // INFINITE ENGINE DETECTOR
+            window.addEventListener('scroll', () => {
+                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 600) {
+                    injectMoreLines();
+                }
+            });
+        });
+
+        function loadLocalProfile() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if(savedData) {
+                const parsed = JSON.parse(savedData);
+                userName = parsed.name; savedCash = parsed.saved || 0;
+                hideAuthOverlay(); renderHeaderUI();
+                pariTalk(`Welcome back, ${userName} bhai!`);
+            }
+        }
+
+        function initCoreProfile() {
+            const inputVal = document.getElementById("user-name-field").value.trim();
+            if(!inputVal) return;
+            userName = inputVal;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({ name: userName, saved: 0 }));
+            hideAuthOverlay(); renderHeaderUI();
+            pariTalk(`Welcome, ${userName} bhai!`);
+        }
+
+        function hideAuthOverlay() { document.getElementById("auth-overlay").style.display = "none"; }
+        function renderHeaderUI() {
+            document.getElementById("app-user-badge").style.display = "flex";
+            document.getElementById("user-display-name").innerText = userName;
+            document.getElementById("user-display-savings").innerText = `Saved: ₹${savedCash}`;
+        }
+
+        function pariTalk(text) {
+            const bubble = document.getElementById("pari-bubble-box");
+            bubble.innerText = text; bubble.classList.add("active");
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const speech = new SpeechSynthesisUtterance(text);
+                speech.lang = 'hi-IN'; window.speechSynthesis.speak(speech);
+            }
+        }
+
+        function detectEnterKey(event) {
+            if (event.key === 'Enter') {
+                const q = document.getElementById("app-search-input").value.trim();
+                if(q) triggerDiscovery(q);
+            }
+        }
+
+        // KEYWORD DETECTION AND SEARCH RE-RENDER ENGINE
+        function triggerDiscovery(keyword) {
+            activeKeyword = keyword; currentRowCount = 0;
+            pariTalk(`Scanning arbo products for ${keyword}...`);
+            document.getElementById("matrix-wall").innerHTML = `<h3 class="section-title">Matrix Results for: ${keyword}</h3>`;
+            for(let i=0; i<4; i++) { injectMoreLines(); }
+        }
+
+        function injectMoreLines() {
+            currentRowCount++;
+            const wall = document.getElementById("matrix-wall");
+            const rowBlock = document.createElement("div");
+            rowBlock.className = "matrix-row";
+            rowBlock.innerHTML = `
+                <div class="row-header"><i class="fa-solid fa-wand-magic-sparkles"></i> Line ${currentRowCount}: Dynamic ${activeKeyword} Engine</div>
+                <div class="matrix-grid" id="grid-row-${currentRowCount}"></div>
+            `;
+            wall.appendChild(rowBlock);
+
+            let priceAz = Math.floor(Math.random() * 600 + 800);
+            let priceFk = Math.floor(Math.random() * 600 + 800);
+            let priceMs = Math.floor(Math.random() * 300 + 399);
+
+            let minPrice = Math.min(priceAz, priceFk, priceMs);
+            const grid = document.getElementById(`grid-row-${currentRowCount}`);
+
+            grid.innerHTML += compileProductCard("Amazon", priceAz, (priceAz === minPrice), currentRowCount);
+            grid.innerHTML += compileProductCard("Flipkart", priceFk, (priceFk === minPrice), currentRowCount);
+            grid.innerHTML += compileProductCard("Meesho", priceMs, (priceMs === minPrice), currentRowCount);
+        }
+
+        function compileProductCard(store, price, isCheapest, index) {
+            let key = activeKeyword.toLowerCase();
+            let imgList = productCatalog[key] || productCatalog["trending"];
+            
+            // AUTOMATIC ROTATION LOOP: Har alag line me automatically alag design photo choose hogi!
+            let imgUrl = imgList[(index - 1) % imgList.length];
+            
+            // Dynamic design title builder
+            let designName = designVariants[(index - 1) % designVariants.length];
+
+            // AUTOMATIC AUTO-AFFILIATE ROUTER MATRIX:
+            // Kisi manual code ki zarurat nahi, ye pure internet ke link ko automatic wrap karta hai runtime par!
+            let targetProductRealUrl = "";
+            if(store === "Amazon") targetProductRealUrl = "https://www.amazon.in/s?k=" + encodeURIComponent(activeKeyword + " " + designName
