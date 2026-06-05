@@ -50,83 +50,83 @@
         }
 
         header {
-            padding: 20px; display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.05); position: sticky; top: 0; z-index: 100;
             background: rgba(6, 2, 18, 0.85); backdrop-filter: blur(8px);
         }
 
         .logo-text {
-            font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: bold;
+            font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: bold;
             background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
         .user-badge {
             background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-            padding: 8px 18px; border-radius: 25px; display: flex; align-items: center; gap: 12px;
+            padding: 6px 14px; border-radius: 25px; display: flex; align-items: center; gap: 8px; font-size: 13px;
         }
 
         .savings-counter { color: var(--neon-green); font-weight: bold; }
 
-        .search-container { max-width: 750px; margin: 40px auto 30px auto; padding: 0 20px; }
+        .search-container { max-width: 750px; margin: 25px auto 20px auto; padding: 0 15px; }
         .search-box-wrapper {
             display: flex; align-items: center; background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.08); border-radius: 40px; padding: 6px 12px;
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 40px; padding: 4px 10px;
         }
 
-        .search-box-wrapper input { flex: 1; background: transparent; border: none; padding: 12px 15px; color: white; font-size: 16px; outline: none; }
-        .scanner-btn { background: transparent; border: none; color: var(--text-dim); font-size: 22px; padding: 8px 12px; cursor: pointer; }
+        .search-box-wrapper input { flex: 1; background: transparent; border: none; padding: 10px 12px; color: white; font-size: 15px; outline: none; }
+        .scanner-btn { background: transparent; border: none; color: var(--text-dim); font-size: 20px; padding: 6px 10px; cursor: pointer; }
         #hidden-file-input { display: none; }
 
-        .categories-section { max-width: 1150px; margin: 0 auto 40px auto; padding: 0 20px; }
-        .section-title { font-family: 'Orbitron', sans-serif; font-size: 16px; margin-bottom: 20px; color: var(--text-dim); letter-spacing: 2px; }
+        .categories-section { max-width: 1150px; margin: 0 auto 25px auto; padding: 0 15px; }
+        .section-title { font-family: 'Orbitron', sans-serif; font-size: 14px; margin-bottom: 15px; color: var(--text-dim); letter-spacing: 1px; }
         
-        .categories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; }
-        .category-card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.04); border-radius: 18px; padding: 22px 12px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .category-card:hover { transform: translateY(-6px); border-color: var(--neon-pink); }
-        .category-card i { font-size: 28px; margin-bottom: 12px; background: linear-gradient(45deg, #a200ff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .categories-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .category-card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.04); border-radius: 14px; padding: 15px 5px; text-align: center; cursor: pointer; transition: 0.3s; }
+        .category-card p { font-size: 11px; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .category-card i { font-size: 20px; background: linear-gradient(45deg, #a200ff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .matrix-container { max-width: 1150px; margin: 0 auto 100px auto; padding: 0 20px; }
-        .matrix-row { background: rgba(10, 4, 22, 0.3); border-radius: 22px; padding: 20px; margin-bottom: 35px; border: 1px solid rgba(255,255,255,0.03); }
-        .row-header { font-size: 14px; color: var(--neon-blue); margin-bottom: 15px; font-weight: bold; font-family: 'Orbitron', sans-serif; }
+        .matrix-container { max-width: 1150px; margin: 0 auto 80px auto; padding: 0 15px; }
+        .matrix-row { background: rgba(10, 4, 22, 0.3); border-radius: 18px; padding: 15px 10px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.03); }
+        .row-header { font-size: 12px; color: var(--neon-blue); margin-bottom: 12px; font-weight: bold; font-family: 'Orbitron', sans-serif; }
         
-        .matrix-grid { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 15px; scroll-snap-type: x mandatory; }
-        
-        @media (min-width: 851px) {
-            .matrix-grid { display: grid; grid-template-columns: repeat(3, 1fr); overflow-x: visible; }
+        /* 1000107093_7.jpg Jaisa Same To Same Grid System */
+        .matrix-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 8px; 
         }
 
         .store-card {
-            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px;
-            padding: 16px; position: relative; min-width: 280px; scroll-snap-align: start;
-            display: flex; flex-direction: column; justify-content: space-between;
+            background: #110b24; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px;
+            padding: 8px; position: relative; display: flex; flex-direction: column; justify-content: space-between;
+            text-align: center; min-width: 0;
         }
 
-        .store-card.cheapest-glow { border: 2px solid var(--neon-green) !important; box-shadow: 0 0 25px rgba(57, 255, 20, 0.35); }
-        .loot-badge { position: absolute; top: -12px; right: 20px; background: var(--neon-green); color: #000; font-size: 10px; font-weight: bold; padding: 4px 10px; border-radius: 12px; }
+        .store-card.cheapest-glow { border: 1px solid var(--neon-blue) !important; box-shadow: 0 0 12px rgba(0, 240, 255, 0.25); }
+        .loot-badge { position: absolute; bottom: 8px; left: 8px; background: #163a2b; color: var(--neon-green); font-size: 9px; font-weight: bold; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
         
-        .product-img-holder { width: 100%; height: 140px; display: flex; justify-content: center; align-items: center; margin-bottom: 12px; background: rgba(0,0,0,0.25); border-radius: 12px; overflow: hidden; }
-        .product-img-holder img { max-height: 100%; max-width: 100%; object-fit: cover; }
+        .product-img-holder { width: 100%; height: 95px; display: flex; justify-content: center; align-items: center; margin-bottom: 8px; background: rgba(0,0,0,0.2); border-radius: 10px; overflow: hidden; }
+        .product-img-holder img { max-height: 100%; max-width: 100%; object-fit: cover; border-radius: 8px; }
 
-        .store-name { font-family: 'Orbitron', sans-serif; font-size: 13px; margin-bottom: 6px; font-weight: bold; }
+        .store-name { font-size: 11px; margin-bottom: 4px; font-weight: 500; text-align: left; color: var(--text-dim); }
         .store-amazon { color: #ff9900; }
         .store-flipkart { color: #2874f0; }
         .store-meesho { color: #f43397; }
 
-        .prod-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .price-row { display: flex; justify-content: space-between; align-items: center; }
-        .price-val { font-size: 18px; font-weight: bold; font-family: 'Orbitron', sans-serif; }
-        .cheapest-glow .price-val { color: var(--neon-green); }
+        .prod-title { display: none; } /* Mobile compact view me Title hide kiya for exact premium matrix look */
+        .price-row { display: flex; flex-direction: column; align-items: flex-start; width: 100%; margin-top: 4px; }
+        .price-val { font-size: 15px; font-weight: bold; color: var(--text-main); font-family: 'Poppins', sans-serif; }
+        
+        .buy-btn { display: none; } /* Image look ke hisab se click poore card par hoga wrapper ke jariye */
+        .card-clickable-wrapper { text-decoration: none; color: inherit; display: block; }
 
-        .buy-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px; text-decoration: none; cursor: pointer; }
-        .cheapest-glow .buy-btn { background: var(--neon-green); color: black; font-weight: bold; }
-
-        .pari-container { position: fixed; bottom: 30px; right: 30px; z-index: 999; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
-        .pari-avatar { width: 90px; height: 90px; background: radial-gradient(circle, rgba(255,0,127,0.25) 0%, transparent 70%); border-radius: 50%; display: flex; justify-content: center; align-items: center; animation: floatPari 3.5s ease-in-out infinite; pointer-events: auto; cursor: pointer; }
-        .pari-bubble { background: rgba(12, 5, 28, 0.95); border: 1px solid var(--neon-blue); box-shadow: 0 0 18px rgba(0, 240, 255, 0.35); padding: 12px 18px; border-radius: 18px; max-width: 250px; font-size: 13px; margin-bottom: 12px; opacity: 0; transform: translateY(10px); transition: 0.3s; text-align: center; pointer-events: auto; }
+        .pari-container { position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
+        .pari-avatar { width: 75px; height: 75px; background: radial-gradient(circle, rgba(255,0,127,0.25) 0%, transparent 70%); border-radius: 50%; display: flex; justify-content: center; align-items: center; animation: floatPari 3.5s ease-in-out infinite; pointer-events: auto; cursor: pointer; }
+        .pari-bubble { background: rgba(12, 5, 28, 0.95); border: 1px solid var(--neon-blue); box-shadow: 0 0 15px rgba(0, 240, 255, 0.35); padding: 10px 14px; border-radius: 16px; max-width: 220px; font-size: 12px; margin-bottom: 10px; opacity: 0; transform: translateY(10px); transition: 0.3s; text-align: center; pointer-events: auto; }
         .pari-bubble.active { opacity: 1; transform: translateY(0); }
 
-        @keyframes floatPari { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+        @keyframes floatPari { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
     </style>
 </head>
 <body>
@@ -150,7 +150,7 @@
 
     <div class="search-container">
         <div class="search-box-wrapper">
-            <input type="text" id="app-search-input" placeholder="Shirt, Shoes, Watch kuch bhi search karein..." onkeypress="detectEnterKey(event)">
+            <input type="text" id="app-search-input" placeholder="Shirt, Shoes, Watch search karein..." onkeypress="detectEnterKey(event)">
             <button class="scanner-btn" onclick="openPhotoScanner()"><i class="fa-solid fa-camera"></i></button>
         </div>
         <input type="file" id="hidden-file-input" accept="image/*">
@@ -174,7 +174,7 @@
     <div class="pari-container">
         <div class="pari-bubble" id="pari-bubble-box"></div>
         <div class="pari-avatar" onclick="pariManualClick()">
-            <svg width="65" height="65" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="55" height="55" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="32" cy="24" r="10" fill="#ff007f" opacity="0.85"/>
                 <circle cx="32" cy="22" r="7" fill="#fff"/>
             </svg>
@@ -292,7 +292,7 @@
                     const speech = new SpeechSynthesisUtterance(text);
                     speech.lang = 'hi-IN'; window.speechSynthesis.speak(speech);
                 }
-            } catch(e) { console.log("Audio speech blocked or unsupported"); }
+            } catch(e) { console.log("Audio speech blocked"); }
         }
 
         function detectEnterKey(event) {
@@ -305,7 +305,7 @@
         function triggerDiscovery(keyword) {
             activeKeyword = keyword; currentRowCount = 0;
             pariTalk(`Scanning arbo products for ${keyword}...`);
-            document.getElementById("matrix-wall").innerHTML = `<h3 class="section-title">Matrix Results for: ${keyword}</h3>`;
+            document.getElementById("matrix-wall").innerHTML = `<h3 class="section-title">Live Price Matrix: ${keyword}</h3>`;
             for(let i=0; i<4; i++) { injectMoreLines(); }
         }
 
@@ -315,7 +315,7 @@
             const rowBlock = document.createElement("div");
             rowBlock.className = "matrix-row";
             rowBlock.innerHTML = `
-                <div class="row-header"><i class="fa-solid fa-wand-magic-sparkles"></i> Line ${currentRowCount}: Dynamic ${activeKeyword} Engine</div>
+                <div class="row-header">Line ${currentRowCount}: Dynamic ${activeKeyword} Engine</div>
                 <div class="matrix-grid" id="grid-row-${currentRowCount}"></div>
             `;
             wall.appendChild(rowBlock);
@@ -339,40 +339,42 @@
             let designName = designVariants[(index - 1) % designVariants.length];
 
             let targetProductRealUrl = "";
-            if(store === "Amazon") targetProductRealUrl = "https://www.amazon.in/s?k=" + encodeURIComponent(activeKeyword + " " + designName);
-            if(store === "Flipkart") targetProductRealUrl = "https://www.flipkart.com/search?q=" + encodeURIComponent(activeKeyword + " " + designName);
-            if(store === "Meesho") targetProductRealUrl = "https://www.meesho.com/search?q=" + encodeURIComponent(activeKeyword + " " + designName);
+            if(store === "Amazon") targetProductRealUrl = "https://www.amazon.in/s?k=" + encodeURIComponent(activeKeyword);
+            if(store === "Flipkart") targetProductRealUrl = "https://www.flipkart.com/search?q=" + encodeURIComponent(activeKeyword);
+            if(store === "Meesho") targetProductRealUrl = "https://www.meesho.com/search?q=" + encodeURIComponent(activeKeyword);
 
             let finalAffiliateRedirect = `${masterAffiliateBase}&goto=${encodeURIComponent(targetProductRealUrl)}`;
 
             if(isCheapest) {
                 return `
-                    <div class="store-card cheapest-glow">
-                        <div class="loot-badge">Pari Loot Deal</div>
-                        <div>
+                    <a href="${finalAffiliateRedirect}" target="_blank" class="card-clickable-wrapper" onclick="addLootSavings(${price})">
+                        <div class="store-card cheapest-glow">
                             <div class="product-img-holder"><img src="${imgUrl}"></div>
-                            <div class="store-name store-${store.toLowerCase()}"><i class="fa-solid fa-store"></i> ${store}</div>
-                            <div class="prod-title">${designName} ${activeKeyword}</div>
+                            <div class="store-name">${store}</div>
+                            <div class="price-row">
+                                <span class="price-val">₹${price}</span>
+                            </div>
+                            <div class="loot-badge">BEST</div>
                         </div>
-                        <div class="price-row"><span class="price-val">₹${price}</span><a href="${finalAffiliateRedirect}" target="_blank" class="buy-btn" onclick="addLootSavings(${price})">Loot Lo</a></div>
-                    </div>
+                    </a>
                 `;
             } else {
                 return `
-                    <div class="store-card">
-                        <div>
-                            <div class="product-img-holder"><img src="${imgUrl}" style="opacity:0.85;"></div>
-                            <div class="store-name store-${store.toLowerCase()}"><i class="fa-solid fa-store"></i> ${store}</div>
-                            <div class="prod-title">${designName} ${activeKeyword}</div>
+                    <a href="${finalAffiliateRedirect}" target="_blank" class="card-clickable-wrapper">
+                        <div class="store-card">
+                            <div class="product-img-holder"><img src="${imgUrl}"></div>
+                            <div class="store-name">${store}</div>
+                            <div class="price-row">
+                                <span class="price-val" style="color:#a4a2c1;">₹${price}</span>
+                            </div>
                         </div>
-                        <div class="price-row"><span class="price-val" style="color:var(--text-dim)">₹${price}</span><a href="${finalAffiliateRedirect}" target="_blank" class="buy-btn">Check Site</a></div>
-                    </div>
+                    </a>
                 `;
             }
         }
 
         function addLootSavings(price) {
-            let extraSaving = Math.floor(Math.random() * 150 + 50);
+            let extraSaving = Math.floor(Math.random() * 15 + 5);
             savedCash += extraSaving;
             localStorage.setItem(STORAGE_KEY, JSON.stringify({ name: userName, saved: savedCash }));
             renderHeaderUI();
