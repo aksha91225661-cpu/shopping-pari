@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Pari - Automated Infinite Matrix</title>
+    <title>Shopping Pari - Infinite Price Matrix</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght=400;700&family=Poppins:wght=300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-color: #060212;
-            --card-bg: rgba(18, 9, 36, 0.7);
+            --bg-color: #050210;
+            --card-bg: rgba(18, 9, 36, 0.75);
             --neon-blue: #00f0ff;
             --neon-pink: #ff007f;
             --neon-green: #39ff14;
@@ -21,32 +21,43 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body {
             background: var(--bg-color); color: var(--text-main); overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 50%, #15082b 0%, var(--bg-color) 85%);
+            background-image: radial-gradient(circle at 50% 50%, #160933 0%, var(--bg-color) 90%);
             min-height: 100vh;
         }
 
-        #auth-overlay {
+        /* 1. Free Local Registration Layer */
+        #reg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(4, 1, 10, 0.97); backdrop-filter: blur(12px); z-index: 10000;
+            background: rgba(4, 1, 10, 0.98); backdrop-filter: blur(15px); z-index: 20000;
             display: flex; justify-content: center; align-items: center;
         }
-
-        .auth-card {
-            background: var(--card-bg); border: 2px solid var(--neon-pink);
-            box-shadow: 0 0 30px rgba(255, 0, 127, 0.4); padding: 40px; border-radius: 24px;
-            text-align: center; max-width: 420px; width: 90%;
+        .reg-card {
+            background: var(--card-bg); border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.3); padding: 40px 30px; border-radius: 24px;
+            text-align: center; max-width: 400px; width: 90%;
+        }
+        .reg-card h2 { font-family: 'Orbitron', sans-serif; color: var(--neon-blue); margin-bottom: 10px; font-size: 24px; }
+        .reg-card input {
+            width: 100%; padding: 14px 20px; background: rgba(0,0,0,0.6);
+            border: 1px solid var(--neon-pink); border-radius: 30px; color: white;
+            font-size: 16px; margin-bottom: 20px; outline: none; text-align: center;
+        }
+        .reg-card button {
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink)); color: white;
+            border: none; padding: 12px 35px; border-radius: 30px; font-weight: 600; cursor: pointer; box-shadow: 0 0 15px var(--neon-pink);
         }
 
-        .auth-card h2 { font-family: 'Orbitron', sans-serif; color: var(--neon-pink); margin-bottom: 15px; }
-        .auth-card input {
-            width: 100%; padding: 14px 22px; background: rgba(0,0,0,0.5);
-            border: 1px solid var(--neon-blue); border-radius: 30px; color: white;
-            font-size: 16px; margin-bottom: 25px; outline: none; text-align: center;
+        /* Floating Pari Zone */
+        .pari-container { text-align: center; margin: 15px 0; position: relative; }
+        .pari-avatar { font-size: 45px; display: inline-block; animation: floatPari 3s ease-in-out infinite; filter: drop-shadow(0 0 10px var(--neon-pink)); }
+        @keyframes floatPari {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(5deg); }
         }
-
-        .auth-card button {
-            background: linear-gradient(45deg, var(--neon-pink), #9000ff); color: white;
-            border: none; padding: 14px 40px; border-radius: 30px; font-weight: 600; cursor: pointer;
+        .pari-bubble {
+            background: rgba(255, 0, 127, 0.15); border: 1px solid var(--neon-pink);
+            padding: 8px 16px; border-radius: 15px; display: inline-block; margin-top: 5px;
+            font-size: 13px; color: #fff; max-width: 80%; box-shadow: 0 0 10px rgba(255, 0, 127, 0.2);
         }
 
         header {
@@ -54,249 +65,255 @@
             border-bottom: 1px solid rgba(255,255,255,0.05); position: sticky; top: 0; z-index: 100;
             background: rgba(6, 2, 18, 0.85); backdrop-filter: blur(8px);
         }
-
         .logo-text {
             font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: bold;
             background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-
         .user-badge {
             background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-            padding: 6px 14px; border-radius: 25px; display: flex; align-items: center; gap: 8px; font-size: 13px;
+            padding: 6px 14px; border-radius: 25px; display: flex; align-items: center; gap: 8px; font-size: 12px;
         }
-
         .savings-counter { color: var(--neon-green); font-weight: bold; }
 
-        .search-container { max-width: 750px; margin: 25px auto 20px auto; padding: 0 15px; }
+        .search-container { max-width: 750px; margin: 20px auto; padding: 0 15px; }
         .search-box-wrapper {
             display: flex; align-items: center; background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.08); border-radius: 40px; padding: 4px 10px;
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 40px; padding: 4px 12px;
         }
+        .search-box-wrapper input { flex: 1; background: transparent; border: none; padding: 10px; color: white; font-size: 15px; outline: none; }
+        .scanner-btn { background: transparent; border: none; color: var(--neon-blue); font-size: 20px; padding: 6px 10px; cursor: pointer; }
 
-        .search-box-wrapper input { flex: 1; background: transparent; border: none; padding: 10px 12px; color: white; font-size: 15px; outline: none; }
-        .scanner-btn { background: transparent; border: none; color: var(--text-dim); font-size: 20px; padding: 6px 10px; cursor: pointer; }
-        #hidden-file-input { display: none; }
-
-        .categories-section { max-width: 1150px; margin: 0 auto 25px auto; padding: 0 15px; }
-        .section-title { font-family: 'Orbitron', sans-serif; font-size: 14px; margin-bottom: 15px; color: var(--text-dim); letter-spacing: 1px; }
-        
+        .categories-section { max-width: 1150px; margin: 0 auto 20px auto; padding: 0 15px; }
         .categories-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .category-card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.04); border-radius: 14px; padding: 15px 5px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .category-card p { font-size: 11px; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .category-card i { font-size: 20px; background: linear-gradient(45deg, #a200ff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .category-card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; padding: 12px 4px; text-align: center; cursor: pointer; transition: 0.2s; }
+        .category-card:hover { border-color: var(--neon-blue); }
+        .category-card p { font-size: 11px; margin-top: 5px; }
+        .category-card i { font-size: 18px; color: var(--neon-blue); }
 
         .matrix-container { max-width: 1150px; margin: 0 auto 80px auto; padding: 0 15px; }
-        .matrix-row { background: rgba(10, 4, 22, 0.3); border-radius: 18px; padding: 15px 12px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.03); }
-        .row-header { font-size: 14px; color: #fff; margin-bottom: 12px; font-weight: 600; letter-spacing: 0.5px; }
+        .matrix-row { background: rgba(10, 4, 22, 0.4); border-radius: 18px; padding: 15px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.03); }
+        .row-header { font-size: 13px; color: #fff; margin-bottom: 12px; font-weight: 600; }
         
-        .matrix-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 10px; 
-        }
+        .matrix-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 
         .store-card {
             background: #110b24; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px;
-            padding: 12px 8px; position: relative; display: flex; flex-direction: column; justify-content: space-between;
-            text-align: center; min-width: 0; transition: transform 0.2s;
+            padding: 10px 6px; position: relative; display: flex; flex-direction: column; justify-content: space-between;
+            text-align: center; cursor: pointer; transition: 0.2s;
         }
-        .store-card:hover { transform: translateY(-3px); border-color: var(--neon-blue); }
-        .store-img { width: 100%; height: 110px; object-fit: contain; border-radius: 8px; background: #1b1530; margin-bottom: 8px; }
         
-        .store-name { font-size: 11px; color: var(--text-dim); text-transform: uppercase; font-weight: bold; margin-bottom: 2px; }
-        .store-price { font-size: 15px; font-weight: bold; color: #fff; }
+        /* 3. Smart Light Glowing Effect on Cheapest Product */
+        .store-card.glow-winner {
+            border: 2px solid var(--neon-green);
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.4);
+            animation: pulseGlow 1.5s infinite alternate;
+        }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 10px rgba(57, 255, 20, 0.3); }
+            100% { box-shadow: 0 0 22px rgba(57, 255, 20, 0.6); }
+        }
+
+        .store-img { width: 100%; height: 100px; object-fit: contain; border-radius: 8px; background: #1b1530; margin-bottom: 6px; }
+        .store-name { font-size: 11px; color: var(--text-dim); font-weight: bold; text-transform: uppercase; }
+        .store-price { font-size: 15px; font-weight: bold; color: #fff; margin: 2px 0; }
         
-        .product-meta { font-size: 9px; color: var(--text-dim); display: flex; flex-direction: column; gap: 2px; margin-top: 6px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 4px; }
+        .product-meta { font-size: 9px; color: var(--text-dim); display: flex; flex-direction: column; gap: 1px; margin-top: 4px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 4px; }
         .meta-rating { color: #ffb800; font-weight: bold; }
         .meta-delivery { color: var(--neon-blue); }
-
-        .best-badge {
-            position: absolute; top: 6px; right: 6px; background: var(--neon-green);
-            color: black; font-size: 8px; font-weight: bold; padding: 1px 6px; border-radius: 6px; z-index: 5;
-        }
-
-        .voice-status-toast {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(0, 240, 255, 0.15); border: 1px solid var(--neon-blue);
-            backdrop-filter: blur(10px); padding: 10px 24px; border-radius: 30px;
-            display: flex; align-items: center; gap: 10px; z-index: 2000;
-        }
-        .voice-status-toast p { font-size: 13px; font-weight: 500; color: #fff; }
+        .not-available { color: var(--neon-pink); font-size: 9px; font-weight: bold; margin-top: 5px; }
     </style>
 </head>
 <body>
 
-    <!-- Security Access Screen Layer -->
-    <div id="auth-overlay">
-        <div class="auth-card">
+    <div id="reg-overlay" style="display: none;">
+        <div class="reg-card">
             <h2>SHOPPING PARI</h2>
-            <p style="color: var(--text-dim); font-size: 13px; margin-bottom: 20px;">Enter Secret Admin Key</p>
-            <input type="password" id="secret-key" placeholder="••••••••">
-            <button onclick="unlockApp()">Initialize Engine</button>
+            <p style="color: var(--text-dim); font-size: 13px; margin-bottom: 20px;">Apna Naam Register Karein ✨</p>
+            <input type="text" id="user-name-input" placeholder="Yahan apna naam likhein...">
+            <button onclick="saveUserLocal()">Airtel Matrix Start</button>
         </div>
     </div>
 
-    <!-- Header Panel -->
     <header>
         <div class="logo-text">SHOPPING PARI</div>
         <div class="user-badge">
-            <span>Tabish</span>
-            <div class="savings-counter">Saved: ₹<span id="saved-amt">188</span></div>
+            <span id="display-profile-name">User</span>
+            <div class="savings-counter">Saved: ₹<span id="saved-amt">540</span></div>
         </div>
     </header>
 
-    <!-- Search Box Interface -->
+    <div class="pari-container">
+        <div class="pari-avatar" id="pari-img">🧚‍♀️✨</div><br>
+        <div class="pari-bubble" id="pari-speech">Hello! Main aapki shopping pari hoon.</div>
+    </div>
+
     <div class="search-container">
         <div class="search-box-wrapper">
-            <input type="text" id="main-search" placeholder="Shirt, Shoes, Watch search karein..." onkeypress="handleSearch(event)">
-            <button class="scanner-btn" onclick="triggerScanner()"><i class="fa-solid fa-camera"></i></button>
-            <input type="file" id="hidden-file-input" accept="image/*" onchange="processScannedImage(event)">
+            <input type="text" id="main-search" placeholder="Kuch bhi search karein (e.g. Bottle, Shoes)..." onkeypress="handleSearch(event)">
+            <button class="scanner-btn" onclick="openGalleryScanner()"><i class="fa-solid fa-camera"></i></button>
+            <input type="file" id="image-upload-handler" style="display: none;" accept="image/*" onchange="processImageScraper(event)">
         </div>
     </div>
 
-    <!-- Categories Grid Option Panels -->
     <div class="categories-section">
-        <div class="section-title">Quick AI Scanners</div>
         <div class="categories-grid">
-            <div class="category-card" onclick="triggerLiveScrape('Watches')">
-                <i class="fa-solid fa-stopwatch"></i><p>Watches</p>
-            </div>
-            <div class="category-card" onclick="triggerLiveScrape('Shoes')">
-                <i class="fa-solid fa-shoe-prints"></i><p>Shoes</p>
-            </div>
-            <div class="category-card" onclick="triggerLiveScrape('Shirts')">
-                <i class="fa-solid fa-shirt"></i><p>Shirts</p>
-            </div>
-            <div class="category-card" onclick="triggerLiveScrape('Phones')">
-                <i class="fa-solid fa-mobile-screen"></i><p>Phones</p>
-            </div>
+            <div class="category-card" onclick="triggerLiveScrape('Watches')"><i class="fa-solid fa-stopwatch"></i><p>Watches</p></div>
+            <div class="category-card" onclick="triggerLiveScrape('Shoes')"><i class="fa-solid fa-shoe-prints"></i><p>Shoes</p></div>
+            <div class="category-card" onclick="triggerLiveScrape('Shirts')"><i class="fa-solid fa-shirt"></i><p>Shirts</p></div>
+            <div class="category-card" onclick="triggerLiveScrape('Phones')"><i class="fa-solid fa-mobile-screen"></i><p>Phones</p></div>
         </div>
     </div>
 
-    <!-- Multi-Row Comparison Interface Wrapper -->
-    <div class="matrix-container" id="matrix-wrapper">
-        <!-- Rows dynamically added here like 1000107093_8.jpg structure -->
-    </div>
-
-    <!-- Notification Toast Element -->
-    <div id="voice-toast-container" style="display: none;">
-        <div class="voice-status-toast">
-            <p id="voice-status-text">Connecting Matrix Engines...</p>
-        </div>
-    </div>
+    <div class="matrix-container" id="matrix-wrapper"></div>
 
     <script>
         const BACKEND_API_URL = "https://shopping-pari-backend.onrender.com/api/scrape";
-        const AFFILIATE_REDIRECT_URL = "https://earnkaro.com"; 
+        
+        // 💰 REVENUE GENERATION SYSTEM - Apni Affiliate ID yahan lagayein
+        const AMAZON_AFFILIATE_TAG = "yourtag-21"; 
+        const FLIPKART_AFFILIATE_ID = "yourflipid";
+        const MEESHO_AFFILIATE_LINK = "https://earnkaro.com"; 
 
-        function speakStatus(text) {
+        function speakText(text) {
+            document.getElementById("pari-speech").innerText = text;
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
-                const ut = new SpeechSynthesisUtterance(text);
-                ut.lang = 'en-US';
-                window.speechSynthesis.speak(ut);
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'hi-IN'; // Speak in Hindi/Hinglish
+                window.speechSynthesis.speak(utterance);
             }
         }
 
-        function unlockApp() {
-            if(document.getElementById("secret-key").value === "tabish") {
-                document.getElementById("auth-overlay").style.display = "none";
-                speakStatus("System online. Welcome Tabish.");
-                triggerLiveScrape('Shoes'); // Pre-load structure setup
+        window.onload = function() {
+            let savedName = localStorage.getItem("shopping_pari_user");
+            if (!savedName) {
+                document.getElementById("reg-overlay").style.display = "flex";
             } else {
-                alert("Access Denied!");
+                document.getElementById("display-profile-name").innerText = savedName;
+                speakText(`Welcome back ${savedName} sir! Magic wand ready hai.`);
+                triggerLiveScrape('Watches');
             }
-        }
+        };
 
-        async function triggerLiveScrape(query) {
-            if(!query) return;
-            document.getElementById("voice-status-text").innerText = `Scanning fields for ${query}...`;
-            document.getElementById("voice-toast-container").style.display = "block";
-            speakStatus(`Scanning products for ${query}`);
-
-            try {
-                const res = await fetch(`${BACKEND_API_URL}?q=${encodeURIComponent(query)}`);
-                const productsArray = await res.json();
-                
-                // Clear older results layout completely to prevent overflow crowding
-                document.getElementById("matrix-wrapper").innerHTML = "";
-
-                // Generate a distinct dynamic layout row block for EACH product style model variant
-                productsArray.forEach(product => {
-                    generateProductComparisonRow(product);
-                });
-
-            } catch (e) {
-                console.log("Error handling infinite matrix script rendering data.");
-            } finally {
-                setTimeout(() => { document.getElementById("voice-toast-container").style.display = "none"; }, 1000);
+        function saveUserLocal() {
+            let name = document.getElementById("user-name-input").value.strip();
+            if(name) {
+                localStorage.setItem("shopping_pari_user", name);
+                document.getElementById("display-profile-name").innerText = name;
+                document.getElementById("reg-overlay").style.display = "none";
+                speakText(`Welcome ${name} sir! Main aapki Shopping Pari hoon.`);
+                triggerLiveScrape('Watches');
             }
-        }
-
-        function generateProductComparisonRow(product) {
-            const wrapper = document.getElementById("matrix-wrapper");
-            
-            // Extract prices to find lowest badge anchor
-            let lowestStore = "meesho";
-            let minPrice = Math.min(product.amz_p, product.flp_p, product.msh_p);
-            if(product.amz_p === minPrice) lowestStore = "amazon";
-            if(product.flp_p === minPrice) lowestStore = "flipkart";
-
-            const row = document.createElement("div");
-            row.className = "matrix-row";
-            row.innerHTML = `
-                <div class="row-header">${product.name}</div>
-                <div class="matrix-grid">
-                    <!-- Amazon Card Block -->
-                    <div class="store-card" onclick="window.open('${AFFILIATE_REDIRECT_URL}', '_blank')">
-                        ${lowestStore === 'amazon' ? '<div class="best-badge">BEST</div>' : ''}
-                        <img class="store-img" src="${product.img}" alt="Product">
-                        <div class="store-name">Amazon</div>
-                        <div class="store-price">₹${product.amz_p}</div>
-                        <div class="product-meta">
-                            <span class="meta-rating">${product.amz_r}</span>
-                            <span class="meta-delivery">${product.amz_d}</span>
-                        </div>
-                    </div>
-                    <!-- Flipkart Card Block -->
-                    <div class="store-card" onclick="window.open('${AFFILIATE_REDIRECT_URL}', '_blank')">
-                        ${lowestStore === 'flipkart' ? '<div class="best-badge">BEST</div>' : ''}
-                        <img class="store-img" src="${product.img}" alt="Product">
-                        <div class="store-name">Flipkart</div>
-                        <div class="store-price">₹${product.flp_p}</div>
-                        <div class="product-meta">
-                            <span class="meta-rating">${product.flp_r}</span>
-                            <span class="meta-delivery">${product.flp_d}</span>
-                        </div>
-                    </div>
-                    <!-- Meesho Card Block -->
-                    <div class="store-card" onclick="window.open('${AFFILIATE_REDIRECT_URL}', '_blank')">
-                        ${lowestStore === 'meesho' ? '<div class="best-badge">BEST</div>' : ''}
-                        <img class="store-img" src="${product.img}" alt="Product">
-                        <div class="store-name">Meesho</div>
-                        <div class="store-price">₹${product.msh_p}</div>
-                        <div class="product-meta">
-                            <span class="meta-rating">${product.msh_r}</span>
-                            <span class="meta-delivery">${product.msh_d}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-            wrapper.appendChild(row); // Appends row sequential downwards inside structure
         }
 
         function handleSearch(e) {
             if (e.key === "Enter") {
                 triggerLiveScrape(document.getElementById("main-search").value);
-                document.getElementById("main-search").value = "";
             }
         }
 
-        function triggerScanner() { document.getElementById("hidden-file-input").click(); }
-        function processScannedImage(e) {
-            speakStatus("Processing custom input file.");
-            setTimeout(() => { triggerLiveScrape("Shoes"); }, 1200);
+        function openGalleryScanner() { document.getElementById("image-upload-handler").click(); }
+        
+        function processImageScraper(e) {
+            speakText("Sir, photo analyze ho rahi hai. Pari magic kar rahi hai!");
+            setTimeout(() => { triggerLiveScrape("Shoes"); }, 1500);
+        }
+
+        async function triggerLiveScrape(query) {
+            if(!query) return;
+            speakText(`Sir magic ho raha hai, ${query} scan ho raha hai...`);
+            
+            try {
+                const res = await fetch(`${BACKEND_API_URL}?q=${encodeURIComponent(query)}`);
+                const productsArray = await res.json();
+                
+                document.getElementById("matrix-wrapper").innerHTML = "";
+
+                if(productsArray.length === 0) {
+                    document.getElementById("matrix-wrapper").innerHTML = "<p style='text-align:center; color:var(--neon-pink);'>No matching products found anywhere.</p>";
+                    return;
+                }
+
+                // Append multi rows (Line 1, Line 2, Line 3...)
+                productsArray.forEach((product, idx) => {
+                    generateRowMarkup(product, idx);
+                });
+
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        function generateRowMarkup(product, index) {
+            const wrapper = document.getElementById("matrix-wrapper");
+            
+            // Find lowest platform to trigger glowing laser light
+            let prices = [];
+            if(product.amz_p > 0) prices.push({name: 'amazon', val: product.amz_p});
+            if(product.flp_p > 0) prices.push({name: 'flipkart', val: product.flp_p});
+            if(product.msh_p > 0) prices.push({name: 'meesho', val: product.msh_p});
+
+            let cheapestStore = "";
+            if(prices.length > 0) {
+                prices.sort((a,b) => a.val - b.val);
+                cheapestStore = prices[0].name;
+            }
+
+            // Inform user via voice about the cheapest choice on line 1
+            if(index === 0 && cheapestStore !== "") {
+                setTimeout(() => {
+                    speakText(`Sir, is line me ${cheapestStore} par saaman sabse sasta hai!`);
+                }, 2000);
+            }
+
+            // Affiliate Link Generators
+            let amzLink = `https://www.amazon.in/dp/example?tag=${AMAZON_AFFILIATE_TAG}`;
+            let flpLink = `https://flipkart.com/search?q=${encodeURIComponent(product.name)}&affid=${FLIPKART_AFFILIATE_ID}`;
+            let mshLink = MEESHO_AFFILIATE_LINK;
+
+            const row = document.createElement("div");
+            row.className = "matrix-row";
+            row.innerHTML = `
+                <div class="row-header">Line ${index+1}: ${product.name}</div>
+                <div class="matrix-grid">
+                    
+                    <div class="store-card ${cheapestStore === 'amazon' ? 'glow-winner' : ''}" onclick="window.open('${amzLink}', '_blank')">
+                        ${cheapestStore === 'amazon' ? '<div class="best-badge">BEST</div>' : ''}
+                        <img class="store-img" src="${product.img}">
+                        <div class="store-name">Amazon</div>
+                        ${product.amz_p > 0 ? `<div class="store-price">₹${product.amz_p}</div>
+                        <div class="product-meta">
+                            <span class="meta-rating">${product.amz_r}</span>
+                            <span class="meta-delivery">${product.amz_d}</span>
+                        </div>` : '<div class="not-available">Not Available</div>'}
+                    </div>
+
+                    <div class="store-card ${cheapestStore === 'flipkart' ? 'glow-winner' : ''}" onclick="window.open('${flpLink}', '_blank')">
+                        ${cheapestStore === 'flipkart' ? '<div class="best-badge">BEST</div>' : ''}
+                        <img class="store-img" src="${product.img}">
+                        <div class="store-name">Flipkart</div>
+                        ${product.flp_p > 0 ? `<div class="store-price">₹${product.flp_p}</div>
+                        <div class="product-meta">
+                            <span class="meta-rating">${product.flp_r}</span>
+                            <span class="meta-delivery">${product.flp_d}</span>
+                        </div>` : '<div class="not-available">Not Available</div>'}
+                    </div>
+
+                    <div class="store-card ${cheapestStore === 'meesho' ? 'glow-winner' : ''}" onclick="window.open('${mshLink}', '_blank')">
+                        ${cheapestStore === 'meesho' ? '<div class="best-badge">BEST</div>' : ''}
+                        <img class="store-img" src="${product.img}">
+                        <div class="store-name">Meesho</div>
+                        ${product.msh_p > 0 ? `<div class="store-price">₹${product.msh_p}</div>
+                        <div class="product-meta">
+                            <span class="meta-rating">${product.msh_r}</span>
+                            <span class="meta-delivery">${product.msh_d}</span>
+                        </div>` : '<div class="not-available">Not Available</div>'}
+                    </div>
+
+                </div>
+            `;
+            wrapper.appendChild(row);
         }
     </script>
 </body>
