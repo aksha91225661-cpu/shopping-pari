@@ -87,13 +87,13 @@
         .category-card i { font-size: 20px; background: linear-gradient(45deg, #a200ff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         .matrix-container { max-width: 1150px; margin: 0 auto 80px auto; padding: 0 15px; }
-        .matrix-row { background: rgba(10, 4, 22, 0.3); border-radius: 18px; padding: 15px 10px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.03); }
-        .row-header { font-size: 12px; color: var(--neon-blue); margin-bottom: 12px; font-weight: bold; font-family: 'Orbitron', sans-serif; }
+        .matrix-row { background: rgba(10, 4, 22, 0.3); border-radius: 18px; padding: 15px 12px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.03); }
+        .row-header { font-size: 14px; color: #fff; margin-bottom: 12px; font-weight: 600; letter-spacing: 0.5px; }
         
         .matrix-grid { 
             display: grid; 
             grid-template-columns: repeat(3, 1fr); 
-            gap: 8px; 
+            gap: 10px; 
         }
 
         .store-card {
@@ -102,50 +102,51 @@
             text-align: center; min-width: 0; transition: transform 0.2s;
         }
         .store-card:hover { transform: translateY(-3px); border-color: var(--neon-blue); }
-        .store-img { width: 100%; height: 95px; object-fit: contain; border-radius: 8px; background: #000; margin-bottom: 8px; }
-        .store-name { font-size: 11px; color: var(--text-dim); margin-bottom: 4px; text-transform: uppercase; }
-        .store-price { font-size: 14px; font-weight: bold; color: white; }
+        .store-img { width: 100%; height: 110px; object-fit: contain; border-radius: 8px; background: #1b1530; margin-bottom: 8px; }
         
+        .store-name { font-size: 11px; color: var(--text-dim); text-transform: uppercase; font-weight: bold; margin-bottom: 2px; }
+        .store-price { font-size: 15px; font-weight: bold; color: #fff; }
+        
+        .product-meta { font-size: 9px; color: var(--text-dim); display: flex; flex-direction: column; gap: 2px; margin-top: 6px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 4px; }
+        .meta-rating { color: #ffb800; font-weight: bold; }
+        .meta-delivery { color: var(--neon-blue); }
+
         .best-badge {
-            position: absolute; top: 4px; right: 4px; background: var(--neon-green);
-            color: black; font-size: 9px; font-weight: bold; padding: 1px 5px; border-radius: 6px;
+            position: absolute; top: 6px; right: 6px; background: var(--neon-green);
+            color: black; font-size: 8px; font-weight: bold; padding: 1px 6px; border-radius: 6px; z-index: 5;
         }
 
-        /* Voice Status Toast Styling */
         .voice-status-toast {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             background: rgba(0, 240, 255, 0.15); border: 1px solid var(--neon-blue);
             backdrop-filter: blur(10px); padding: 10px 24px; border-radius: 30px;
             display: flex; align-items: center; gap: 10px; z-index: 2000;
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2); animation: pulse 1.5s infinite;
         }
         .voice-status-toast p { font-size: 13px; font-weight: 500; color: #fff; }
-        .voice-status-toast span { width: 8px; height: 8px; background: var(--neon-blue); border-radius: 50%; }
-
-        @keyframes pulse {
-            0% { opacity: 0.8; } 50% { opacity: 1; box-shadow: 0 0 25px rgba(0, 240, 255, 0.4); } 100% { opacity: 0.8; }
-        }
     </style>
 </head>
 <body>
 
+    <!-- Security Access Screen Layer -->
     <div id="auth-overlay">
         <div class="auth-card">
             <h2>SHOPPING PARI</h2>
-            <p style="color: var(--text-dim); font-size: 13px; margin-bottom: 20px;">Enter Admin Security Key to Connect Matrix</p>
+            <p style="color: var(--text-dim); font-size: 13px; margin-bottom: 20px;">Enter Secret Admin Key</p>
             <input type="password" id="secret-key" placeholder="••••••••">
             <button onclick="unlockApp()">Initialize Engine</button>
         </div>
     </div>
 
+    <!-- Header Panel -->
     <header>
         <div class="logo-text">SHOPPING PARI</div>
         <div class="user-badge">
             <span>Tabish</span>
-            <div class="savings-counter">Saved: ₹<span id="saved-amt">74</span></div>
+            <div class="savings-counter">Saved: ₹<span id="saved-amt">188</span></div>
         </div>
     </header>
 
+    <!-- Search Box Interface -->
     <div class="search-container">
         <div class="search-box-wrapper">
             <input type="text" id="main-search" placeholder="Shirt, Shoes, Watch search karein..." onkeypress="handleSearch(event)">
@@ -154,8 +155,9 @@
         </div>
     </div>
 
+    <!-- Categories Grid Option Panels -->
     <div class="categories-section">
-        <div class="section-title">Quick Scanners</div>
+        <div class="section-title">Quick AI Scanners</div>
         <div class="categories-grid">
             <div class="category-card" onclick="triggerLiveScrape('Watches')">
                 <i class="fa-solid fa-stopwatch"></i><p>Watches</p>
@@ -169,197 +171,132 @@
             <div class="category-card" onclick="triggerLiveScrape('Phones')">
                 <i class="fa-solid fa-mobile-screen"></i><p>Phones</p>
             </div>
-            <div class="category-card" onclick="triggerLiveScrape('Jewelry')">
-                <i class="fa-solid fa-gem"></i><p>Jewelry</p>
-            </div>
-            <div class="category-card" onclick="triggerLiveScrape('Clothes')">
-                <i class="fa-solid fa-socks"></i><p>Clothes</p>
-            </div>
-            <div class="category-card" onclick="triggerLiveScrape('Sarees')">
-                <i class="fa-solid fa-person-dress"></i><p>Sarees</p>
-            </div>
-            <div class="category-card" onclick="triggerLiveScrape('Glasses')">
-                <i class="fa-solid fa-glasses"></i><p>Glasses</p>
-            </div>
         </div>
     </div>
 
+    <!-- Multi-Row Comparison Interface Wrapper -->
     <div class="matrix-container" id="matrix-wrapper">
-        <div class="matrix-row">
-            <div class="row-header">Line 1: Live Price Matrix</div>
-            <div class="matrix-grid" id="live-grid-container">
-                <div class="store-card" onclick="redirectToEarnKaro()">
-                    <div class="best-badge">BEST</div>
-                    <img class="store-img" src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" alt="Product">
-                    <div class="store-name">Amazon</div>
-                    <div class="store-price">₹499</div>
-                </div>
-                <div class="store-card" onclick="redirectToEarnKaro()">
-                    <img class="store-img" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" alt="Product">
-                    <div class="store-name">Flipkart</div>
-                    <div class="store-price">₹540</div>
-                </div>
-                <div class="store-card" onclick="redirectToEarnKaro()">
-                    <img class="store-img" src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400" alt="Product">
-                    <div class="store-name">Meesho</div>
-                    <div class="store-price">₹399</div>
-                </div>
-            </div>
-        </div>
+        <!-- Rows dynamically added here like 1000107093_8.jpg structure -->
     </div>
 
+    <!-- Notification Toast Element -->
     <div id="voice-toast-container" style="display: none;">
         <div class="voice-status-toast">
-            <span></span>
-            <p id="voice-status-text">Scanning arbo products...</p>
+            <p id="voice-status-text">Connecting Matrix Engines...</p>
         </div>
     </div>
 
     <script>
-        // BACKEND RENDER URL CONFIGURATION
         const BACKEND_API_URL = "https://shopping-pari-backend.onrender.com/api/scrape";
-        
-        // Monetization Affiliate Link
         const AFFILIATE_REDIRECT_URL = "https://earnkaro.com"; 
 
-        // Sound System
         function speakStatus(text) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'en-US';
-                utterance.rate = 1.0;
-                window.speechSynthesis.speak(utterance);
+                const ut = new SpeechSynthesisUtterance(text);
+                ut.lang = 'en-US';
+                window.speechSynthesis.speak(ut);
             }
         }
 
-        // Authentication Screen Layer
         function unlockApp() {
-            const inputKey = document.getElementById("secret-key").value;
-            if(inputKey === "tabish") {
-                document.getElementById("auth-overlay").style.opacity = "0";
-                setTimeout(() => {
-                    document.getElementById("auth-overlay").style.display = "none";
-                }, 400);
-                speakStatus("System unlocked. Welcome Tabish.");
+            if(document.getElementById("secret-key").value === "tabish") {
+                document.getElementById("auth-overlay").style.display = "none";
+                speakStatus("System online. Welcome Tabish.");
+                triggerLiveScrape('Shoes'); // Pre-load structure setup
             } else {
-                alert("Incorrect Security Access Key!");
+                alert("Access Denied!");
             }
         }
 
-        // Trigger Render Engine Web Scraping
         async function triggerLiveScrape(query) {
-            if(!query || query.trim() === "") return;
-
-            // Trigger Real Voice Action & UI Toast Panel
-            const statusMessage = `Scanning arbo products for ${query}`;
-            document.getElementById("voice-status-text").innerText = statusMessage + "...";
+            if(!query) return;
+            document.getElementById("voice-status-text").innerText = `Scanning fields for ${query}...`;
             document.getElementById("voice-toast-container").style.display = "block";
-            speakStatus(statusMessage);
+            speakStatus(`Scanning products for ${query}`);
 
             try {
-                // Fetch dynamic real-time data from Render Server
-                const response = await fetch(`${BACKEND_API_URL}?q=${encodeURIComponent(query)}`);
-                if (!response.ok) throw new Error("Network error");
+                const res = await fetch(`${BACKEND_API_URL}?q=${encodeURIComponent(query)}`);
+                const productsArray = await res.json();
                 
-                const data = await response.json();
-                
-                // Update Layout Matrix
-                updatePriceMatrixUI(query, data);
-            } catch (error) {
-                console.error("Scraping error:", error);
+                // Clear older results layout completely to prevent overflow crowding
+                document.getElementById("matrix-wrapper").innerHTML = "";
+
+                // Generate a distinct dynamic layout row block for EACH product style model variant
+                productsArray.forEach(product => {
+                    generateProductComparisonRow(product);
+                });
+
+            } catch (e) {
+                console.log("Error handling infinite matrix script rendering data.");
             } finally {
-                // Hide Voice Toast
-                setTimeout(() => {
-                    document.getElementById("voice-toast-container").style.display = "none";
-                }, 1000);
+                setTimeout(() => { document.getElementById("voice-toast-container").style.display = "none"; }, 1000);
             }
         }
 
-        // Update Matrix Grid Interface Layout dynamically
-        function updatePriceMatrixUI(itemName, scrapedData) {
-            const container = document.getElementById("matrix-wrapper");
+        function generateProductComparisonRow(product) {
+            const wrapper = document.getElementById("matrix-wrapper");
             
-            // Find Lowest Price to Attach "BEST" Green Badge
+            // Extract prices to find lowest badge anchor
             let lowestStore = "meesho";
-            let minPrice = Infinity;
-            
-            for(let store in scrapedData) {
-                if(scrapedData[store].price > 0 && scrapedData[store].price < minPrice) {
-                    minPrice = scrapedData[store].price;
-                    lowestStore = store;
-                }
-            }
+            let minPrice = Math.min(product.amz_p, product.flp_p, product.msh_p);
+            if(product.amz_p === minPrice) lowestStore = "amazon";
+            if(product.flp_p === minPrice) lowestStore = "flipkart";
 
-            // Create New Row Element Structure
-            const newRow = document.createElement("div");
-            newRow.className = "matrix-row";
-            newRow.innerHTML = `
-                <div class="row-header">Live Price Matrix: ${itemName}</div>
+            const row = document.createElement("div");
+            row.className = "matrix-row";
+            row.innerHTML = `
+                <div class="row-header">${product.name}</div>
                 <div class="matrix-grid">
-                    <div class="store-card" onclick="redirectToEarnKaro()">
+                    <!-- Amazon Card Block -->
+                    <div class="store-card" onclick="window.open('${AFFILIATE_REDIRECT_URL}', '_blank')">
                         ${lowestStore === 'amazon' ? '<div class="best-badge">BEST</div>' : ''}
-                        <img class="store-img" src="${scrapedData.amazon.img || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'}" alt="Amazon">
+                        <img class="store-img" src="${product.img}" alt="Product">
                         <div class="store-name">Amazon</div>
-                        <div class="store-price">₹${scrapedData.amazon.price || 'N/A'}</div>
+                        <div class="store-price">₹${product.amz_p}</div>
+                        <div class="product-meta">
+                            <span class="meta-rating">${product.amz_r}</span>
+                            <span class="meta-delivery">${product.amz_d}</span>
+                        </div>
                     </div>
-                    <div class="store-card" onclick="redirectToEarnKaro()">
+                    <!-- Flipkart Card Block -->
+                    <div class="store-card" onclick="window.open('${AFFILIATE_REDIRECT_URL}', '_blank')">
                         ${lowestStore === 'flipkart' ? '<div class="best-badge">BEST</div>' : ''}
-                        <img class="store-img" src="${scrapedData.flipkart.img || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400'}" alt="Flipkart">
+                        <img class="store-img" src="${product.img}" alt="Product">
                         <div class="store-name">Flipkart</div>
-                        <div class="store-price">₹${scrapedData.flipkart.price || 'N/A'}</div>
+                        <div class="store-price">₹${product.flp_p}</div>
+                        <div class="product-meta">
+                            <span class="meta-rating">${product.flp_r}</span>
+                            <span class="meta-delivery">${product.flp_d}</span>
+                        </div>
                     </div>
-                    <div class="store-card" onclick="redirectToEarnKaro()">
+                    <!-- Meesho Card Block -->
+                    <div class="store-card" onclick="window.open('${AFFILIATE_REDIRECT_URL}', '_blank')">
                         ${lowestStore === 'meesho' ? '<div class="best-badge">BEST</div>' : ''}
-                        <img class="store-img" src="${scrapedData.meesho.img || 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400'}" alt="Meesho">
+                        <img class="store-img" src="${product.img}" alt="Product">
                         <div class="store-name">Meesho</div>
-                        <div class="store-price">₹${scrapedData.meesho.price || 'N/A'}</div>
+                        <div class="store-price">₹${product.msh_p}</div>
+                        <div class="product-meta">
+                            <span class="meta-rating">${product.msh_r}</span>
+                            <span class="meta-delivery">${product.msh_d}</span>
+                        </div>
                     </div>
                 </div>
             `;
-            
-            // Insert element on top profile container row
-            container.insertBefore(newRow, container.firstChild);
-
-            // Increment Dynamic Simulated User Savings Counter
-            const currentSavings = parseInt(document.getElementById("saved-amt").innerText);
-            document.getElementById("saved-amt").innerText = currentSavings + Math.floor(Math.random() * 15 + 5);
+            wrapper.appendChild(row); // Appends row sequential downwards inside structure
         }
 
-        // Text Search Entry Key Handler
-        function handleSearch(event) {
-            if (event.key === "Enter") {
-                const queryVal = document.getElementById("main-search").value;
-                if(queryVal.trim() !== "") {
-                    triggerLiveScrape(queryVal);
-                    document.getElementById("main-search").value = ""; // clear
-                }
+        function handleSearch(e) {
+            if (e.key === "Enter") {
+                triggerLiveScrape(document.getElementById("main-search").value);
+                document.getElementById("main-search").value = "";
             }
         }
 
-        // Photo Camera Input trigger simulation
-        function triggerScanner() {
-            document.getElementById("hidden-file-input").click();
-        }
-
-        // Camera Upload file content analyzer simulation logic
-        function processScannedImage(event) {
-            const file = event.target.files[0];
-            if (file) {
-                // AI vision detection simulation mapping names based on keywords
-                const randomItems = ["Smart Watch", "Sneakers", "Denim Shirt", "Wireless Headphone", "Sun glasses"];
-                const detectedObject = randomItems[Math.floor(Math.random() * randomItems.length)];
-                
-                speakStatus("Image processing initialized.");
-                setTimeout(() => {
-                    triggerLiveScrape(detectedObject);
-                }, 1200);
-            }
-        }
-
-        // Affiliate Redirection Link Route
-        function redirectToEarnKaro() {
-            window.open(AFFILIATE_REDIRECT_URL, '_blank');
+        function triggerScanner() { document.getElementById("hidden-file-input").click(); }
+        function processScannedImage(e) {
+            speakStatus("Processing custom input file.");
+            setTimeout(() => { triggerLiveScrape("Shoes"); }, 1200);
         }
     </script>
 </body>
