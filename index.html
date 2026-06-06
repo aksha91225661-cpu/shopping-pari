@@ -1,158 +1,366 @@
-                "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400",
-                "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400",
-                "https://images.unsplash.com/photo-1508296695146-257a814070b4?w=400",
-                "https://images.unsplash.com/photo-1577803645773-f96470509666?w=400"
-            ],
-            trending: [
-                "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400",
-                "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400"
-            ]
-        };
-
-        const designVariants = ["Classic", "Luxury Ultra", "Sport Edition", "Street Wear Spec", "Retro Designer", "Premium Bold"];
-
-        document.addEventListener("DOMContentLoaded", () => {
-            loadLocalProfile();
-            triggerDiscovery(activeKeyword);
-            
-            window.addEventListener('scroll', () => {
-                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 600) {
-                    injectMoreLines();
-                }
-            });
-        });
-
-        function loadLocalProfile() {
-            const savedData = localStorage.getItem(STORAGE_KEY);
-            if(savedData) {
-                const parsed = JSON.parse(savedData);
-                userName = parsed.name; savedCash = parsed.saved || 0;
-                hideAuthOverlay(); renderHeaderUI();
-                setTimeout(() => { pariTalk(`Welcome back, ${userName} bhai!`); }, 800);
-            }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Pari - Automated Infinite Matrix</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght=400;700&family=Poppins:wght=300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #060212;
+            --card-bg: rgba(18, 9, 36, 0.7);
+            --neon-blue: #00f0ff;
+            --neon-pink: #ff007f;
+            --neon-green: #39ff14;
+            --text-main: #ffffff;
+            --text-dim: #a4a2c1;
         }
 
-        function initCoreProfile() {
-            const inputVal = document.getElementById("user-name-field").value.trim();
-            if(!inputVal) return;
-            userName = inputVal;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify({ name: userName, saved: 0 }));
-            hideAuthOverlay(); renderHeaderUI();
-            setTimeout(() => { pariTalk(`Welcome, ${userName} bhai!`); }, 500);
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body {
+            background: var(--bg-color); color: var(--text-main); overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, #15082b 0%, var(--bg-color) 85%);
+            min-height: 100vh;
         }
 
-        function hideAuthOverlay() { document.getElementById("auth-overlay").style.display = "none"; }
+        #auth-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(4, 1, 10, 0.97); backdrop-filter: blur(12px); z-index: 10000;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .auth-card {
+            background: var(--card-bg); border: 2px solid var(--neon-pink);
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.4); padding: 40px; border-radius: 24px;
+            text-align: center; max-width: 420px; width: 90%;
+        }
+
+        .auth-card h2 { font-family: 'Orbitron', sans-serif; color: var(--neon-pink); margin-bottom: 15px; }
+        .auth-card input {
+            width: 100%; padding: 14px 22px; background: rgba(0,0,0,0.5);
+            border: 1px solid var(--neon-blue); border-radius: 30px; color: white;
+            font-size: 16px; margin-bottom: 25px; outline: none; text-align: center;
+        }
+
+        .auth-card button {
+            background: linear-gradient(45deg, var(--neon-pink), #9000ff); color: white;
+            border: none; padding: 14px 40px; border-radius: 30px; font-weight: 600; cursor: pointer;
+        }
+
+        header {
+            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05); position: sticky; top: 0; z-index: 100;
+            background: rgba(6, 2, 18, 0.85); backdrop-filter: blur(8px);
+        }
+
+        .logo-text {
+            font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: bold;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .user-badge {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            padding: 6px 14px; border-radius: 25px; display: flex; align-items: center; gap: 8px; font-size: 13px;
+        }
+
+        .savings-counter { color: var(--neon-green); font-weight: bold; }
+
+        .search-container { max-width: 750px; margin: 25px auto 20px auto; padding: 0 15px; }
+        .search-box-wrapper {
+            display: flex; align-items: center; background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 40px; padding: 4px 10px;
+        }
+
+        .search-box-wrapper input { flex: 1; background: transparent; border: none; padding: 10px 12px; color: white; font-size: 15px; outline: none; }
+        .scanner-btn { background: transparent; border: none; color: var(--text-dim); font-size: 20px; padding: 6px 10px; cursor: pointer; }
+        #hidden-file-input { display: none; }
+
+        .categories-section { max-width: 1150px; margin: 0 auto 25px auto; padding: 0 15px; }
+        .section-title { font-family: 'Orbitron', sans-serif; font-size: 14px; margin-bottom: 15px; color: var(--text-dim); letter-spacing: 1px; }
         
-        function renderHeaderUI() {
-            document.getElementById("app-user-badge").style.display = "flex";
-            document.getElementById("user-display-name").innerText = userName;
-            document.getElementById("user-display-savings").innerText = `Saved: ₹${savedCash}`;
+        .categories-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .category-card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.04); border-radius: 14px; padding: 15px 5px; text-align: center; cursor: pointer; transition: 0.3s; }
+        .category-card p { font-size: 11px; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .category-card i { font-size: 20px; background: linear-gradient(45deg, #a200ff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .matrix-container { max-width: 1150px; margin: 0 auto 80px auto; padding: 0 15px; }
+        .matrix-row { background: rgba(10, 4, 22, 0.3); border-radius: 18px; padding: 15px 10px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.03); }
+        .row-header { font-size: 12px; color: var(--neon-blue); margin-bottom: 12px; font-weight: bold; font-family: 'Orbitron', sans-serif; }
+        
+        .matrix-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 8px; 
         }
 
-        function pariTalk(text) {
-            const bubble = document.getElementById("pari-bubble-box");
-            bubble.innerText = text; bubble.classList.add("active");
-            try {
-                if ('speechSynthesis' in window) {
-                    window.speechSynthesis.cancel();
-                    const speech = new SpeechSynthesisUtterance(text);
-                    speech.lang = 'hi-IN'; window.speechSynthesis.speak(speech);
-                }
-            } catch(e) { console.log("Audio speech blocked"); }
+        .store-card {
+            background: #110b24; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px;
+            padding: 12px 8px; position: relative; display: flex; flex-direction: column; justify-content: space-between;
+            text-align: center; min-width: 0; transition: transform 0.2s;
+        }
+        .store-card:hover { transform: translateY(-3px); border-color: var(--neon-blue); }
+        .store-img { width: 100%; height: 95px; object-fit: contain; border-radius: 8px; background: #000; margin-bottom: 8px; }
+        .store-name { font-size: 11px; color: var(--text-dim); margin-bottom: 4px; text-transform: uppercase; }
+        .store-price { font-size: 14px; font-weight: bold; color: white; }
+        
+        .best-badge {
+            position: absolute; top: 4px; right: 4px; background: var(--neon-green);
+            color: black; font-size: 9px; font-weight: bold; padding: 1px 5px; border-radius: 6px;
         }
 
-        function detectEnterKey(event) {
-            if (event.key === 'Enter') {
-                const q = document.getElementById("app-search-input").value.trim();
-                if(q) triggerDiscovery(q);
+        /* Voice Status Toast Styling */
+        .voice-status-toast {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0, 240, 255, 0.15); border: 1px solid var(--neon-blue);
+            backdrop-filter: blur(10px); padding: 10px 24px; border-radius: 30px;
+            display: flex; align-items: center; gap: 10px; z-index: 2000;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2); animation: pulse 1.5s infinite;
+        }
+        .voice-status-toast p { font-size: 13px; font-weight: 500; color: #fff; }
+        .voice-status-toast span { width: 8px; height: 8px; background: var(--neon-blue); border-radius: 50%; }
+
+        @keyframes pulse {
+            0% { opacity: 0.8; } 50% { opacity: 1; box-shadow: 0 0 25px rgba(0, 240, 255, 0.4); } 100% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="auth-overlay">
+        <div class="auth-card">
+            <h2>SHOPPING PARI</h2>
+            <p style="color: var(--text-dim); font-size: 13px; margin-bottom: 20px;">Enter Admin Security Key to Connect Matrix</p>
+            <input type="password" id="secret-key" placeholder="••••••••">
+            <button onclick="unlockApp()">Initialize Engine</button>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo-text">SHOPPING PARI</div>
+        <div class="user-badge">
+            <span>Tabish</span>
+            <div class="savings-counter">Saved: ₹<span id="saved-amt">74</span></div>
+        </div>
+    </header>
+
+    <div class="search-container">
+        <div class="search-box-wrapper">
+            <input type="text" id="main-search" placeholder="Shirt, Shoes, Watch search karein..." onkeypress="handleSearch(event)">
+            <button class="scanner-btn" onclick="triggerScanner()"><i class="fa-solid fa-camera"></i></button>
+            <input type="file" id="hidden-file-input" accept="image/*" onchange="processScannedImage(event)">
+        </div>
+    </div>
+
+    <div class="categories-section">
+        <div class="section-title">Quick Scanners</div>
+        <div class="categories-grid">
+            <div class="category-card" onclick="triggerLiveScrape('Watches')">
+                <i class="fa-solid fa-stopwatch"></i><p>Watches</p>
+            </div>
+            <div class="category-card" onclick="triggerLiveScrape('Shoes')">
+                <i class="fa-solid fa-shoe-prints"></i><p>Shoes</p>
+            </div>
+            <div class="category-card" onclick="triggerLiveScrape('Shirts')">
+                <i class="fa-solid fa-shirt"></i><p>Shirts</p>
+            </div>
+            <div class="category-card" onclick="triggerLiveScrape('Phones')">
+                <i class="fa-solid fa-mobile-screen"></i><p>Phones</p>
+            </div>
+            <div class="category-card" onclick="triggerLiveScrape('Jewelry')">
+                <i class="fa-solid fa-gem"></i><p>Jewelry</p>
+            </div>
+            <div class="category-card" onclick="triggerLiveScrape('Clothes')">
+                <i class="fa-solid fa-socks"></i><p>Clothes</p>
+            </div>
+            <div class="category-card" onclick="triggerLiveScrape('Sarees')">
+                <i class="fa-solid fa-person-dress"></i><p>Sarees</p>
+            </div>
+            <div class="category-card" onclick="triggerLiveScrape('Glasses')">
+                <i class="fa-solid fa-glasses"></i><p>Glasses</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="matrix-container" id="matrix-wrapper">
+        <div class="matrix-row">
+            <div class="row-header">Line 1: Live Price Matrix</div>
+            <div class="matrix-grid" id="live-grid-container">
+                <div class="store-card" onclick="redirectToEarnKaro()">
+                    <div class="best-badge">BEST</div>
+                    <img class="store-img" src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" alt="Product">
+                    <div class="store-name">Amazon</div>
+                    <div class="store-price">₹499</div>
+                </div>
+                <div class="store-card" onclick="redirectToEarnKaro()">
+                    <img class="store-img" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" alt="Product">
+                    <div class="store-name">Flipkart</div>
+                    <div class="store-price">₹540</div>
+                </div>
+                <div class="store-card" onclick="redirectToEarnKaro()">
+                    <img class="store-img" src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400" alt="Product">
+                    <div class="store-name">Meesho</div>
+                    <div class="store-price">₹399</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="voice-toast-container" style="display: none;">
+        <div class="voice-status-toast">
+            <span></span>
+            <p id="voice-status-text">Scanning arbo products...</p>
+        </div>
+    </div>
+
+    <script>
+        // BACKEND RENDER URL CONFIGURATION
+        const BACKEND_API_URL = "https://shopping-pari-backend.onrender.com/api/scrape";
+        
+        // Monetization Affiliate Link
+        const AFFILIATE_REDIRECT_URL = "https://earnkaro.com"; 
+
+        // Sound System
+        function speakStatus(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 1.0;
+                window.speechSynthesis.speak(utterance);
             }
         }
 
-        function triggerDiscovery(keyword) {
-            activeKeyword = keyword; currentRowCount = 0;
-            pariTalk(`Scanning arbo products for ${keyword}...`);
-            document.getElementById("matrix-wall").innerHTML = `<h3 class="section-title">Live Price Matrix: ${keyword}</h3>`;
-            for(let i=0; i<4; i++) { injectMoreLines(); }
-        }
-
-        function injectMoreLines() {
-            currentRowCount++;
-            const wall = document.getElementById("matrix-wall");
-            const rowBlock = document.createElement("div");
-            rowBlock.className = "matrix-row";
-            rowBlock.innerHTML = `
-                <div class="row-header">Line ${currentRowCount}: Dynamic ${activeKeyword} Engine</div>
-                <div class="matrix-grid" id="grid-row-${currentRowCount}"></div>
-            `;
-            wall.appendChild(rowBlock);
-
-            let priceAz = Math.floor(Math.random() * 600 + 800);
-            let priceFk = Math.floor(Math.random() * 600 + 800);
-            let priceMs = Math.floor(Math.random() * 300 + 399);
-
-            let minPrice = Math.min(priceAz, priceFk, priceMs);
-            const grid = document.getElementById(`grid-row-${currentRowCount}`);
-
-            grid.innerHTML += compileProductCard("Amazon", priceAz, (priceAz === minPrice), currentRowCount);
-            grid.innerHTML += compileProductCard("Flipkart", priceFk, (priceFk === minPrice), currentRowCount);
-            grid.innerHTML += compileProductCard("Meesho", priceMs, (priceMs === minPrice), currentRowCount);
-        }
-
-        function compileProductCard(store, price, isCheapest, index) {
-            let key = activeKeyword.toLowerCase();
-            let imgList = productCatalog[key] || productCatalog["trending"];
-            let imgUrl = imgList[(index - 1) % imgList.length];
-            let designName = designVariants[(index - 1) % designVariants.length];
-
-            let targetProductRealUrl = "";
-            if(store === "Amazon") targetProductRealUrl = "https://www.amazon.in/s?k=" + encodeURIComponent(activeKeyword);
-            if(store === "Flipkart") targetProductRealUrl = "https://www.flipkart.com/search?q=" + encodeURIComponent(activeKeyword);
-            if(store === "Meesho") targetProductRealUrl = "https://www.meesho.com/search?q=" + encodeURIComponent(activeKeyword);
-
-            let finalAffiliateRedirect = `${masterAffiliateBase}&goto=${encodeURIComponent(targetProductRealUrl)}`;
-
-            if(isCheapest) {
-                return `
-                    <a href="${finalAffiliateRedirect}" target="_blank" class="card-clickable-wrapper" onclick="addLootSavings(${price})">
-                        <div class="store-card cheapest-glow">
-                            <div class="product-img-holder"><img src="${imgUrl}"></div>
-                            <div class="store-name">${store}</div>
-                            <div class="price-row">
-                                <span class="price-val">₹${price}</span>
-                            </div>
-                            <div class="loot-badge">BEST</div>
-                        </div>
-                    </a>
-                `;
+        // Authentication Screen Layer
+        function unlockApp() {
+            const inputKey = document.getElementById("secret-key").value;
+            if(inputKey === "tabish") {
+                document.getElementById("auth-overlay").style.opacity = "0";
+                setTimeout(() => {
+                    document.getElementById("auth-overlay").style.display = "none";
+                }, 400);
+                speakStatus("System unlocked. Welcome Tabish.");
             } else {
-                return `
-                    <a href="${finalAffiliateRedirect}" target="_blank" class="card-clickable-wrapper">
-                        <div class="store-card">
-                            <div class="product-img-holder"><img src="${imgUrl}"></div>
-                            <div class="store-name">${store}</div>
-                            <div class="price-row">
-                                <span class="price-val" style="color:#a4a2c1;">₹${price}</span>
-                            </div>
-                        </div>
-                    </a>
-                `;
+                alert("Incorrect Security Access Key!");
             }
         }
 
-        function addLootSavings(price) {
-            let extraSaving = Math.floor(Math.random() * 15 + 5);
-            savedCash += extraSaving;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify({ name: userName, saved: savedCash }));
-            renderHeaderUI();
+        // Trigger Render Engine Web Scraping
+        async function triggerLiveScrape(query) {
+            if(!query || query.trim() === "") return;
+
+            // Trigger Real Voice Action & UI Toast Panel
+            const statusMessage = `Scanning arbo products for ${query}`;
+            document.getElementById("voice-status-text").innerText = statusMessage + "...";
+            document.getElementById("voice-toast-container").style.display = "block";
+            speakStatus(statusMessage);
+
+            try {
+                // Fetch dynamic real-time data from Render Server
+                const response = await fetch(`${BACKEND_API_URL}?q=${encodeURIComponent(query)}`);
+                if (!response.ok) throw new Error("Network error");
+                
+                const data = await response.json();
+                
+                // Update Layout Matrix
+                updatePriceMatrixUI(query, data);
+            } catch (error) {
+                console.error("Scraping error:", error);
+            } finally {
+                // Hide Voice Toast
+                setTimeout(() => {
+                    document.getElementById("voice-toast-container").style.display = "none";
+                }, 1000);
+            }
         }
 
-        function openPhotoScanner() {
-            document.getElementById("hidden-file-input").click();
-            document.getElementById("hidden-file-input").onchange = () => {
-                triggerDiscovery("Shirt");
-            };
+        // Update Matrix Grid Interface Layout dynamically
+        function updatePriceMatrixUI(itemName, scrapedData) {
+            const container = document.getElementById("matrix-wrapper");
+            
+            // Find Lowest Price to Attach "BEST" Green Badge
+            let lowestStore = "meesho";
+            let minPrice = Infinity;
+            
+            for(let store in scrapedData) {
+                if(scrapedData[store].price > 0 && scrapedData[store].price < minPrice) {
+                    minPrice = scrapedData[store].price;
+                    lowestStore = store;
+                }
+            }
+
+            // Create New Row Element Structure
+            const newRow = document.createElement("div");
+            newRow.className = "matrix-row";
+            newRow.innerHTML = `
+                <div class="row-header">Live Price Matrix: ${itemName}</div>
+                <div class="matrix-grid">
+                    <div class="store-card" onclick="redirectToEarnKaro()">
+                        ${lowestStore === 'amazon' ? '<div class="best-badge">BEST</div>' : ''}
+                        <img class="store-img" src="${scrapedData.amazon.img || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'}" alt="Amazon">
+                        <div class="store-name">Amazon</div>
+                        <div class="store-price">₹${scrapedData.amazon.price || 'N/A'}</div>
+                    </div>
+                    <div class="store-card" onclick="redirectToEarnKaro()">
+                        ${lowestStore === 'flipkart' ? '<div class="best-badge">BEST</div>' : ''}
+                        <img class="store-img" src="${scrapedData.flipkart.img || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400'}" alt="Flipkart">
+                        <div class="store-name">Flipkart</div>
+                        <div class="store-price">₹${scrapedData.flipkart.price || 'N/A'}</div>
+                    </div>
+                    <div class="store-card" onclick="redirectToEarnKaro()">
+                        ${lowestStore === 'meesho' ? '<div class="best-badge">BEST</div>' : ''}
+                        <img class="store-img" src="${scrapedData.meesho.img || 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400'}" alt="Meesho">
+                        <div class="store-name">Meesho</div>
+                        <div class="store-price">₹${scrapedData.meesho.price || 'N/A'}</div>
+                    </div>
+                </div>
+            `;
+            
+            // Insert element on top profile container row
+            container.insertBefore(newRow, container.firstChild);
+
+            // Increment Dynamic Simulated User Savings Counter
+            const currentSavings = parseInt(document.getElementById("saved-amt").innerText);
+            document.getElementById("saved-amt").innerText = currentSavings + Math.floor(Math.random() * 15 + 5);
         }
-        function pariManualClick() { pariTalk("Main har line ka sasta maal dhoodh nikalungi bhai!"); }
+
+        // Text Search Entry Key Handler
+        function handleSearch(event) {
+            if (event.key === "Enter") {
+                const queryVal = document.getElementById("main-search").value;
+                if(queryVal.trim() !== "") {
+                    triggerLiveScrape(queryVal);
+                    document.getElementById("main-search").value = ""; // clear
+                }
+            }
+        }
+
+        // Photo Camera Input trigger simulation
+        function triggerScanner() {
+            document.getElementById("hidden-file-input").click();
+        }
+
+        // Camera Upload file content analyzer simulation logic
+        function processScannedImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // AI vision detection simulation mapping names based on keywords
+                const randomItems = ["Smart Watch", "Sneakers", "Denim Shirt", "Wireless Headphone", "Sun glasses"];
+                const detectedObject = randomItems[Math.floor(Math.random() * randomItems.length)];
+                
+                speakStatus("Image processing initialized.");
+                setTimeout(() => {
+                    triggerLiveScrape(detectedObject);
+                }, 1200);
+            }
+        }
+
+        // Affiliate Redirection Link Route
+        function redirectToEarnKaro() {
+            window.open(AFFILIATE_REDIRECT_URL, '_blank');
+        }
     </script>
 </body>
 </html>
