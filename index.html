@@ -25,7 +25,6 @@
             min-height: 100vh;
         }
 
-        /* 1. Free Local Registration Layer */
         #reg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(4, 1, 10, 0.98); backdrop-filter: blur(15px); z-index: 20000;
@@ -47,7 +46,6 @@
             border: none; padding: 12px 35px; border-radius: 30px; font-weight: 600; cursor: pointer; box-shadow: 0 0 15px var(--neon-pink);
         }
 
-        /* Floating Pari Zone */
         .pari-container { text-align: center; margin: 15px 0; position: relative; }
         .pari-avatar { font-size: 45px; display: inline-block; animation: floatPari 3s ease-in-out infinite; filter: drop-shadow(0 0 10px var(--neon-pink)); }
         @keyframes floatPari {
@@ -103,7 +101,6 @@
             text-align: center; cursor: pointer; transition: 0.2s;
         }
         
-        /* 3. Smart Light Glowing Effect on Cheapest Product */
         .store-card.glow-winner {
             border: 2px solid var(--neon-green);
             box-shadow: 0 0 20px rgba(57, 255, 20, 0.4);
@@ -126,7 +123,7 @@
 </head>
 <body>
 
-    <div id="reg-overlay" style="display: none;">
+    <div id="reg-overlay">
         <div class="reg-card">
             <h2>SHOPPING PARI</h2>
             <p style="color: var(--text-dim); font-size: 13px; margin-bottom: 20px;">Apna Naam Register Karein ✨</p>
@@ -170,7 +167,6 @@
     <script>
         const BACKEND_API_URL = "https://shopping-pari-backend.onrender.com/api/scrape";
         
-        // 💰 REVENUE GENERATION SYSTEM - Apni Affiliate ID yahan lagayein
         const AMAZON_AFFILIATE_TAG = "yourtag-21"; 
         const FLIPKART_AFFILIATE_ID = "yourflipid";
         const MEESHO_AFFILIATE_LINK = "https://earnkaro.com"; 
@@ -180,7 +176,7 @@
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'hi-IN'; // Speak in Hindi/Hinglish
+                utterance.lang = 'hi-IN';
                 window.speechSynthesis.speak(utterance);
             }
         }
@@ -197,13 +193,15 @@
         };
 
         function saveUserLocal() {
-            let name = document.getElementById("user-name-input").value.strip();
+            let name = document.getElementById("user-name-input").value.trim();
             if(name) {
                 localStorage.setItem("shopping_pari_user", name);
                 document.getElementById("display-profile-name").innerText = name;
                 document.getElementById("reg-overlay").style.display = "none";
                 speakText(`Welcome ${name} sir! Main aapki Shopping Pari hoon.`);
                 triggerLiveScrape('Watches');
+            } else {
+                alert("Please enter a name!");
             }
         }
 
@@ -235,7 +233,6 @@
                     return;
                 }
 
-                // Append multi rows (Line 1, Line 2, Line 3...)
                 productsArray.forEach((product, idx) => {
                     generateRowMarkup(product, idx);
                 });
@@ -248,7 +245,6 @@
         function generateRowMarkup(product, index) {
             const wrapper = document.getElementById("matrix-wrapper");
             
-            // Find lowest platform to trigger glowing laser light
             let prices = [];
             if(product.amz_p > 0) prices.push({name: 'amazon', val: product.amz_p});
             if(product.flp_p > 0) prices.push({name: 'flipkart', val: product.flp_p});
@@ -260,14 +256,12 @@
                 cheapestStore = prices[0].name;
             }
 
-            // Inform user via voice about the cheapest choice on line 1
             if(index === 0 && cheapestStore !== "") {
                 setTimeout(() => {
                     speakText(`Sir, is line me ${cheapestStore} par saaman sabse sasta hai!`);
                 }, 2000);
             }
 
-            // Affiliate Link Generators
             let amzLink = `https://www.amazon.in/dp/example?tag=${AMAZON_AFFILIATE_TAG}`;
             let flpLink = `https://flipkart.com/search?q=${encodeURIComponent(product.name)}&affid=${FLIPKART_AFFILIATE_ID}`;
             let mshLink = MEESHO_AFFILIATE_LINK;
